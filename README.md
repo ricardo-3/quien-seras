@@ -4,7 +4,7 @@ Un test interactivo que, a través de una serie de preguntas, descubre tu arquet
 
 ## 🚀 Demo en vivo
 
-👉 [Hacer el test]([https://TU-URL-AQUI.com](https://ricardo-3.github.io/quien-seras/))
+👉 [Hacer el test](https://TU-URL-AQUI.com](https://ricardo-3.github.io/quien-seras/))
 
 ---
 
