@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>¿Quién Serás? — Test Vocacional</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#08080f; --surface:#0f0f18; --card:#13131d;
+  --accent1:#ff5c2b; --accent2:#00d4ff; --accent3:#b8ff57; --accent4:#ff3dbb;
+  --text:#f0ede8; --muted:#5a5768; --border:#22222e;
+  --fd:'Bebas Neue',sans-serif; --fb:'DM Sans',sans-serif; --fm:'Space Mono',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:var(--fb);min-height:100vh;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 50px,rgba(255,255,255,0.012) 50px,rgba(255,255,255,0.012) 51px),repeating-linear-gradient(90deg,transparent,transparent 50px,rgba(255,255,255,0.012) 50px,rgba(255,255,255,0.012) 51px);pointer-events:none;z-index:0;}
+.screen{display:none;min-height:100vh;position:relative;z-index:1;}
+.screen.active{display:flex;flex-direction:column;}
+#gp{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--accent1),var(--accent2));transition:width 0.5s ease;z-index:100;width:0%;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+@keyframes modalIn{from{opacity:0;transform:translateY(20px) scale(0.97);}to{opacity:1;transform:translateY(0) scale(1);}}
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--border);}
+
+/* INTRO */
+#s0{align-items:center;justify-content:center;text-align:center;padding:2rem;background:radial-gradient(ellipse at 20% 20%,rgba(255,92,43,.15) 0%,transparent 55%),radial-gradient(ellipse at 80% 75%,rgba(0,212,255,.12) 0%,transparent 55%);}
+.itag{font-family:var(--fm);font-size:.65rem;letter-spacing:.35em;color:var(--accent1);text-transform:uppercase;margin-bottom:1.8rem;animation:fadeUp .7s ease both .1s;}
+.ititle{font-family:var(--fd);font-size:clamp(4.5rem,12vw,9rem);line-height:.9;animation:fadeUp .7s ease both .2s;}
+.ititle span{color:var(--accent2);}
+.isub{margin-top:1.8rem;font-size:1rem;color:var(--muted);max-width:460px;line-height:1.75;font-weight:300;animation:fadeUp .7s ease both .35s;}
+.isub strong{color:var(--text);}
+.itags{margin-top:1rem;display:flex;gap:1.5rem;justify-content:center;flex-wrap:wrap;animation:fadeUp .7s ease both .45s;}
+.itag2{font-family:var(--fm);font-size:.6rem;letter-spacing:.15em;color:var(--muted);text-transform:uppercase;}
+.btn{padding:1rem 2.8rem;background:var(--accent1);color:#fff;border:none;font-family:var(--fd);font-size:1.3rem;letter-spacing:.08em;cursor:pointer;clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px));transition:transform .2s,filter .2s;animation:fadeUp .7s ease both .6s;margin-top:3rem;}
+.btn:hover{transform:scale(1.04);filter:brightness(1.15);}
+.ifooter{position:absolute;bottom:1.5rem;right:1.5rem;font-family:var(--fm);font-size:.55rem;color:var(--muted);letter-spacing:.15em;text-transform:uppercase;}
+
+/* REFERENTES */
+#s1{padding:0;}
+.rh{padding:3rem 2rem 1.5rem;text-align:center;background:linear-gradient(180deg,rgba(0,212,255,.06) 0%,transparent 100%);border-bottom:1px solid var(--border);}
+.stag{font-family:var(--fm);font-size:.6rem;letter-spacing:.3em;color:var(--accent2);text-transform:uppercase;margin-bottom:.8rem;}
+.rh h2{font-family:var(--fd);font-size:clamp(2.5rem,6vw,4.5rem);line-height:1;}
+.rh h2 span{color:var(--accent2);}
+.rh p{margin-top:.8rem;font-size:.9rem;color:var(--muted);max-width:500px;margin-inline:auto;}
+.rinstr{text-align:center;padding:1.2rem;background:rgba(184,255,87,.06);border-top:1px solid rgba(184,255,87,.15);border-bottom:1px solid rgba(184,255,87,.15);font-family:var(--fm);font-size:.7rem;letter-spacing:.1em;color:var(--accent3);}
+.rgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1px;background:var(--border);flex:1;}
+.rcard{background:var(--card);padding:2rem;cursor:pointer;position:relative;overflow:hidden;transition:background .25s;border:2px solid transparent;}
+.rcard:hover{background:#1a1a25;}
+.rcard.liked{border-color:var(--accent3);background:rgba(184,255,87,.05);}
+.rcard.liked::after{content:'✓ ME INSPIRA';position:absolute;top:1rem;right:1rem;font-family:var(--fm);font-size:.55rem;letter-spacing:.15em;color:var(--accent3);background:rgba(184,255,87,.12);padding:.25rem .5rem;}
+.remoji{font-size:2.2rem;margin-bottom:1rem;}
+.rname{font-family:var(--fd);font-size:1.6rem;letter-spacing:.04em;line-height:1;margin-bottom:.3rem;}
+.rtitle{font-family:var(--fm);font-size:.6rem;letter-spacing:.2em;color:var(--accent1);text-transform:uppercase;margin-bottom:1rem;}
+.rbio{font-size:.85rem;color:var(--muted);line-height:1.65;font-weight:300;}
+.rbio strong{color:var(--text);}
+.rtags{margin-top:1.2rem;display:flex;flex-wrap:wrap;gap:.4rem;}
+.rtag{font-family:var(--fm);font-size:.55rem;letter-spacing:.12em;padding:.2rem .5rem;border:1px solid var(--border);color:var(--muted);text-transform:uppercase;}
+.rcountry{position:absolute;bottom:1.2rem;right:1.2rem;font-size:1.2rem;}
+.rcta{margin-top:1.5rem;font-family:var(--fm);font-size:.65rem;letter-spacing:.1em;color:var(--accent2);text-transform:uppercase;}
+.rfoot{padding:2rem;text-align:center;border-top:1px solid var(--border);background:var(--surface);}
+.rcounter{font-family:var(--fm);font-size:.7rem;color:var(--muted);margin-bottom:1.2rem;letter-spacing:.1em;}
+.rcounter span{color:var(--accent3);font-size:1.1rem;}
+
+/* QUIZ */
+#s2{padding:0;}
+.qhdr{padding:2rem 2rem 1rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.qsteplbl{font-family:var(--fm);font-size:.6rem;letter-spacing:.25em;color:var(--muted);text-transform:uppercase;}
+.qstepnum{font-family:var(--fd);font-size:2rem;color:var(--accent1);}
+.qbarw{width:100%;height:2px;background:var(--border);}
+.qbarf{height:100%;background:linear-gradient(90deg,var(--accent1),var(--accent4));transition:width .4s ease;}
+.qbody{flex:1;padding:3rem 2rem;max-width:700px;margin:0 auto;width:100%;}
+.qqtag{font-family:var(--fm);font-size:.6rem;letter-spacing:.3em;color:var(--accent4);text-transform:uppercase;margin-bottom:1rem;}
+.qqtext{font-family:var(--fd);font-size:clamp(1.8rem,4vw,2.8rem);line-height:1.1;margin-bottom:.8rem;}
+.qhint{font-size:.85rem;color:var(--muted);margin-bottom:2.5rem;font-style:italic;}
+.qopts{display:flex;flex-direction:column;gap:.8rem;}
+.qopt{padding:1.2rem 1.5rem;background:var(--card);border:2px solid var(--border);color:var(--text);font-family:var(--fb);font-size:.95rem;text-align:left;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:1rem;clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,8px 100%,0 calc(100% - 8px));}
+.qopt:hover{border-color:var(--accent2);background:rgba(0,212,255,.06);transform:translateX(4px);}
+.qopt.sel{border-color:var(--accent1);background:rgba(255,92,43,.08);}
+.qoptl{font-family:var(--fm);font-size:.7rem;color:var(--accent1);min-width:1.5rem;}
+
+/* RESULTADO */
+#s3{padding:0;background:radial-gradient(ellipse at 15% 15%,rgba(184,255,87,.08) 0%,transparent 50%),radial-gradient(ellipse at 85% 85%,rgba(255,61,187,.08) 0%,transparent 50%);}
+.rhero{padding:4rem 2rem 2rem;text-align:center;border-bottom:1px solid var(--border);}
+.rtag2{font-family:var(--fm);font-size:.6rem;letter-spacing:.4em;color:var(--accent3);text-transform:uppercase;margin-bottom:1rem;}
+.rpname{font-family:var(--fd);font-size:clamp(3rem,8vw,6rem);line-height:.95;margin-bottom:.5rem;}
+.rebig{font-size:4rem;margin-bottom:1rem;}
+.rdesc{max-width:550px;margin:1.5rem auto 0;font-size:1rem;line-height:1.75;color:var(--muted);font-weight:300;}
+.rdesc strong{color:var(--text);}
+.rscores{padding:2.5rem 2rem;max-width:700px;margin:0 auto;width:100%;}
+.rscores h3,.rcarr h3,.rmatch h3{font-family:var(--fd);font-size:1.5rem;margin-bottom:1.5rem;letter-spacing:.05em;}
+.rscores h3 span{color:var(--accent3);}
+.sbw{margin-bottom:1.2rem;}
+.slbl{display:flex;justify-content:space-between;align-items:center;margin-bottom:.4rem;font-family:var(--fm);font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;}
+.slbl .val{color:var(--accent3);}
+.strack{height:6px;background:var(--border);overflow:hidden;}
+.sfill{height:100%;transition:width 1.2s cubic-bezier(.16,1,.3,1);width:0%;}
+.rcarr{padding:0 2rem 2.5rem;max-width:700px;margin:0 auto;width:100%;}
+.rcarr h3 span{color:var(--accent1);}
+.clist{display:flex;flex-direction:column;gap:1rem;}
+.citem{padding:1.2rem 1.5rem;background:var(--card);border-left:3px solid var(--accent1);display:flex;gap:1rem;align-items:flex-start;}
+.cicon{font-size:1.5rem;}
+.cinfo h4{font-family:var(--fd);font-size:1.1rem;letter-spacing:.03em;margin-bottom:.3rem;}
+.cinfo p{font-size:.82rem;color:var(--muted);line-height:1.6;}
+.rmatch{padding:0 2rem 2.5rem;max-width:700px;margin:0 auto;width:100%;}
+.rmatch h3 span{color:var(--accent2);}
+.mchips{display:flex;flex-wrap:wrap;gap:.6rem;}
+.mchip{padding:.5rem 1rem;background:rgba(0,212,255,.08);border:1px solid rgba(0,212,255,.25);font-family:var(--fm);font-size:.65rem;letter-spacing:.1em;color:var(--accent2);text-transform:uppercase;}
+.rfrase{padding:2.5rem 2rem;max-width:700px;margin:0 auto;width:100%;text-align:center;border-top:1px solid var(--border);}
+.rfrase blockquote{font-family:var(--fd);font-size:clamp(1.4rem,3vw,2rem);line-height:1.3;color:var(--accent3);margin-bottom:.5rem;}
+.rfrase cite{font-family:var(--fm);font-size:.65rem;color:var(--muted);letter-spacing:.15em;text-transform:uppercase;font-style:normal;}
+.ract{padding:1.5rem 2rem 3rem;text-align:center;display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;}
+.btn2{padding:.8rem 2rem;background:transparent;color:var(--accent2);border:1px solid var(--accent2);font-family:var(--fd);font-size:1.1rem;letter-spacing:.08em;cursor:pointer;transition:all .2s;}
+.btn2:hover{background:rgba(0,212,255,.08);}
+.btn3{padding:.8rem 2rem;background:var(--accent3);color:#000;border:none;font-family:var(--fd);font-size:1.1rem;letter-spacing:.08em;cursor:pointer;clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,8px 100%,0 calc(100% - 8px));}
+
+/* MODAL */
+.moverlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:200;align-items:center;justify-content:center;padding:1.5rem;backdrop-filter:blur(6px);}
+.moverlay.open{display:flex;}
+.mbox{background:var(--card);border:1px solid var(--border);max-width:580px;width:100%;padding:2.5rem;position:relative;max-height:90vh;overflow-y:auto;animation:modalIn .3s ease;}
+.mclose{position:absolute;top:1rem;right:1rem;background:none;border:none;color:var(--muted);font-size:1.4rem;cursor:pointer;line-height:1;transition:color .2s;}
+.mclose:hover{color:var(--text);}
+.memoji{font-size:3rem;margin-bottom:1rem;}
+.mname{font-family:var(--fd);font-size:2.2rem;margin-bottom:.3rem;}
+.msub{font-family:var(--fm);font-size:.6rem;letter-spacing:.25em;color:var(--accent1);text-transform:uppercase;margin-bottom:1.5rem;}
+.mbio{font-size:.9rem;line-height:1.8;color:rgba(240,237,232,.75);}
+.mbio strong{color:var(--text);}
+.mlesson{margin-top:1.8rem;padding:1.2rem;background:rgba(184,255,87,.05);border-left:3px solid var(--accent3);}
+.mlessonlbl{font-family:var(--fm);font-size:.55rem;letter-spacing:.2em;color:var(--accent3);text-transform:uppercase;margin-bottom:.5rem;}
+.mlesson p{font-size:.88rem;line-height:1.65;color:var(--text);font-style:italic;}
+.mbtn{margin-top:1.8rem;width:100%;padding:.9rem;background:var(--accent1);border:none;color:#fff;font-family:var(--fd);font-size:1.2rem;letter-spacing:.1em;cursor:pointer;transition:filter .2s;}
+.mbtn:hover{filter:brightness(1.15);}
+.mbtn.lk{background:rgba(184,255,87,.15);color:var(--accent3);border:1px solid var(--accent3);}
+@media(max-width:600px){.rgrid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div id="gp"></div>
+<div class="moverlay" id="modal"></div>
+
+<!-- INTRO -->
+<div class="screen active" id="s0">
+  <div style="max-width:700px;margin:0 auto;padding:2rem;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;text-align:center;">
+    <p class="itag">🌍 Test Vocacional · Edición Global</p>
+    <h1 class="ititle">¿QUIÉN<br><span>SERÁS?</span></h1>
+    <p class="isub">Conoce a los <strong>referentes que cambiaron el mundo</strong> — diseñadores, ingenieros, tecnólogos y atletas que construyeron su camino desde cero. Luego descubre <strong>tu perfil</strong>.</p>
+    <div class="itags">
+      <span class="itag2">🎨 Diseño</span>
+      <span class="itag2">⚙️ Ingeniería</span>
+      <span class="itag2">💻 Tecnología</span>
+      <span class="itag2">🏆 Deporte</span>
+      <span class="itag2">🚀 Negocios</span>
+    </div>
+    <button class="btn" onclick="goTo('s1');setP(15)">EXPLORAR REFERENTES →</button>
+    <p style="margin-top:1.5rem;font-family:'Space Mono',monospace;font-size:.58rem;color:var(--muted);letter-spacing:.15em;animation:fadeUp .7s ease both .7s">~15 min · 16 referentes globales · 10 preguntas</p>
+  </div>
+  <div class="ifooter">Hecho para mentes colombianas con visión global 🇨🇴</div>
+</div>
+
+<!-- REFERENTES -->
+<div class="screen" id="s1">
+  <div class="rh">
+    <p class="stag">Paso 1 de 3 — Explora</p>
+    <h2>CONOCE A LOS<br><span>GRANDES</span></h2>
+    <p>Lee sus historias. Marca los que más te inspiran. Son personas reales que lo lograron.</p>
+  </div>
+  <div class="rinstr">★ Haz clic en cada tarjeta para leer la historia completa → luego marca "ME INSPIRA"</div>
+  <div class="rgrid" id="rgrid"></div>
+  <div class="rfoot">
+    <p class="rcounter">Marcados: <span id="lcount">0</span> / 16</p><p id="msg-continuar" style="font-family:'Space Mono',monospace;font-size:.6rem;color:var(--accent1);letter-spacing:.1em;margin-bottom:.8rem;">★ Elige al menos 1 referente para continuar</p>
+    <button class="btn" id="btn-continuar" style="font-size:1.1rem;padding:.9rem 2.2rem;opacity:.35;cursor:not-allowed;" disabled onclick="goTo('s2');setP(50)">CONTINUAR AL TEST →</button>
+    <p style="margin-top:.8rem;font-family:'Space Mono',monospace;font-size:.58rem;color:var(--muted);letter-spacing:.1em">No es obligatorio marcar ninguno — igual funciona</p>
+  </div>
+</div>
+
+<!-- QUIZ -->
+<div class="screen" id="s2">
+  <div class="qhdr">
+    <div><p class="qsteplbl">Pregunta</p><p class="qstepnum" id="qnum">1</p></div>
+    <div style="text-align:right"><p class="qsteplbl">Paso 2 de 3</p><p style="font-family:'Space Mono',monospace;font-size:.6rem;color:var(--muted)">de 10 preguntas</p></div>
+  </div>
+  <div class="qbarw"><div class="qbarf" id="qbar" style="width:0%"></div></div>
+  <div class="qbody">
+    <p class="qqtag" id="qtag">—</p>
+    <h2 class="qqtext" id="qtext">—</h2>
+    <p class="qhint" id="qhint">—</p>
+    <div class="qopts" id="qopts"></div>
+  </div>
+</div>
+
+<!-- RESULTADO -->
+<div class="screen" id="s3">
+  <div class="rhero">
+    <p class="rtag2">Tu perfil vocacional</p>
+    <div class="rebig" id="remoji">🚀</div>
+    <h2 class="rpname" id="rpname">—</h2>
+    <p class="rdesc" id="rdesc">—</p>
+  </div>
+  <div class="rscores"><h3>TUS <span>DIMENSIONES</span></h3><div id="sbars"></div></div>
+  <div class="rcarr"><h3>CARRERAS QUE <span>TE ESPERAN</span></h3><div class="clist" id="clist"></div></div>
+  <div class="rmatch">
+    <h3>TUS <span>REFERENTES AFINES</span></h3>
+    <p style="font-size:.85rem;color:var(--muted);margin-bottom:1rem">Estas personas recorrieron caminos similares al tuyo:</p>
+    <div class="mchips" id="mchips"></div>
+  </div>
+  <div class="rfrase"><blockquote id="rquote">—</blockquote><cite id="rqauth">—</cite></div>
+  <div class="ract">
+    <button class="btn2" onclick="location.reload()">↩ VOLVER A EMPEZAR</button>
+    <button class="btn3" onclick="window.print()">GUARDAR RESULTADO</button>
+  </div>
+</div>
+
+<script>
+const REFS = [
+  {id:'dieter',emoji:'⬛',name:'Dieter Rams',title:'Maestro del Diseño Industrial',country:'🇩🇪',
+   bio:'<strong>Dieter Rams</strong> nació en 1932 en Wiesbaden, Alemania. Estudió carpintería y arquitectura de interiores. Pasó 40 años en Braun redefiniendo cómo se ven los productos cotidianos — radios, calculadoras, maquinillas de afeitar.',
+   bioFull:`<strong>Dieter Rams</strong> nació en 1932 en Wiesbaden, Alemania, en una familia de artesanos. Su abuelo carpintero le enseñó desde niño a respetar los materiales y la funcionalidad. Estudió carpintería y luego arquitectura de interiores, combinando trabajo manual con pensamiento conceptual.<br><br>En 1955 se unió a <strong>Braun</strong> y allí transformó para siempre la forma en que los objetos se relacionan con las personas. Sus productos — radios, calculadoras, cafeteras, maquinillas — tenían algo que muy pocos lograban: eran tan honestos y claros que casi desaparecían del entorno sin molestar.<br><br>Su filosofía se resume en sus famosos <strong>10 principios del buen diseño</strong>: innovador, útil, estético, comprensible, discreto, honesto, duradero, detallado y —sobre todo— tan poco diseño como sea posible. <em>Menos, pero mejor.</em><br><br>Su trabajo inspiró directamente a <strong>Jony Ive</strong> en Apple. El iPhone, el MacBook, el iPod llevan su ADN. Sin haber salido de Alemania, su influencia rodea literalmente a miles de millones de personas en el mundo.`,
+   lesson:'El buen diseño resuelve problemas reales sin gritar. La simplicidad es la máxima sofisticación.',
+   tags:['Diseño Industrial','Minimalismo','UX','Braun'],
+   sc:{di:5,te:2,ne:1,de:0,ci:2,cr:5}},
+
+  {id:'jobs',emoji:'🍎',name:'Steve Jobs',title:'Visionario Tech & Diseño',country:'🇺🇸',
+   bio:'<strong>Steve Jobs</strong> no terminó la universidad, pero asistió a una clase de caligrafía por curiosidad. Años después esa clase inspiró las fuentes del primer Mac. Cofundó Apple en un garaje a los 21 años.',
+   bioFull:`<strong>Steve Jobs</strong> nació en 1955 en San Francisco, hijo de padres universitarios que lo dieron en adopción. Creció en Silicon Valley y desde niño tuvo una obsesión: que las cosas fueran perfectas.<br><br>Entró a Reed College pero lo dejó a los 6 meses. Siguió yendo a clases de forma informal — incluyendo una de caligrafía que cambiaría la historia de la tipografía digital. "No podía conectar los puntos mirando hacia adelante, solo hacia atrás", diría después.<br><br>Con 21 años cofundó <strong>Apple</strong> en el garaje de su familia junto a Steve Wozniak. Fue expulsado en 1985. Fundó <strong>NeXT</strong> y compró lo que se convertiría en <strong>Pixar</strong>. Cuando regresó a Apple en 1997, la empresa estaba en quiebra. Lo que siguió fue el mayor resurgimiento empresarial de la historia: iMac, iPod, iPhone, iPad.<br><br>Jobs entendió que la tecnología sola no basta. Lo que importa es la <strong>intersección entre tecnología y humanidades</strong>. Por eso el empaque de un iPhone es tan cuidado como el dispositivo mismo. Diseño y tecnología son la misma cosa.`,
+   lesson:'La pasión y la curiosidad son más poderosas que el diploma. El diseño y la tecnología son inseparables.',
+   tags:['Tecnología','Diseño','Liderazgo','Apple'],
+   sc:{di:5,te:5,ne:4,de:0,ci:2,cr:5}},
+
+  {id:'timcook',emoji:'🔗',name:'Tim Cook',title:'CEO de Apple · Ingeniero Industrial',country:'🇺🇸',
+   bio:'<strong>Tim Cook</strong> estudió Ingeniería Industrial y luego un MBA. Es el hombre que convirtió la cadena de suministro de Apple en una máquina perfecta — y llevó a la empresa al valor de 3 billones de dólares.',
+   bioFull:`<strong>Tim Cook</strong> nació en 1960 en Robertsdale, Alabama. Estudió <strong>Ingeniería Industrial</strong> en Auburn University y luego un <strong>MBA en Duke</strong>. Trabajó 12 años en IBM antes de que Jobs lo llamara en 1998.<br><br>Cuando llegó a Apple, la empresa tenía meses de inventario acumulado y cadenas ineficientes. Cook las transformó: redujo el inventario de meses a días, cerró fábricas propias, creó alianzas globales. Hizo de Apple una máquina de eficiencia sin precedentes.<br><br>Cuando Jobs murió en 2011, muchos dudaban. Lo que hizo Cook fue llevar a Apple a convertirse en la <strong>primera empresa en valer 3 billones de dólares</strong> en la historia.<br><br>Cook representa algo que poca gente entiende: la ingeniería industrial y la logística son tan creativas y estratégicas como el diseño. <strong>Hacer que las cosas lleguen al mundo correctamente es un arte.</strong>`,
+   lesson:'La excelencia operativa es una forma de creatividad. Un ingeniero industrial puede dirigir la empresa más valiosa del planeta.',
+   tags:['Ingeniería Industrial','Logística','Liderazgo','Apple'],
+   sc:{di:2,te:4,ne:5,de:0,ci:3,cr:2}},
+
+  {id:'ive',emoji:'💡',name:'Jony Ive',title:'Director de Diseño de Apple',country:'🇬🇧',
+   bio:'<strong>Jony Ive</strong> es el diseñador detrás del iMac, el iPod, el iPhone y el MacBook. Estudió diseño industrial en un politécnico inglés y redefinió qué significa que un objeto tecnológico sea hermoso.',
+   bioFull:`<strong>Jonathan Ive</strong> nació en 1967 en Chingford, Londres. Desde pequeño dibujaba objetos y los desarmaba para estudiarlos. Estudió <strong>Diseño Industrial</strong> en el Newcastle Polytechnic — no en una universidad de élite, sino en una escuela técnica de diseño.<br><br>Fue contratado por Apple en 1992. Cuando Jobs regresó en 1997, vio en Ive a su socio creativo más importante. Su primera gran colaboración fue el <strong>iMac G3</strong> de 1998 — una computadora translúcida y colorida que nadie había visto.<br><br>Lo que siguió fue una serie de objetos que cambiaron el mundo: <strong>iPod</strong> (2001), <strong>iPhone</strong> (2007), <strong>MacBook Air</strong> (2008), <strong>iPad</strong> (2010), Apple Watch. Cada uno era una declaración de que la tecnología puede y debe ser bella.<br><br>Ive trabajó obsesivamente con materiales — aluminio, vidrio Gorilla, acero inoxidable — con la idea de que el diseño debe parecer <strong>inevitable</strong>. En 2019 dejó Apple para fundar su propio estudio creativo.`,
+   lesson:'El diseño industrial y la tecnología son inseparables. Un objeto bien diseñado hace que la tecnología sea humana.',
+   tags:['Diseño Industrial','Materiales','Apple','UX'],
+   sc:{di:5,te:4,ne:1,de:0,ci:3,cr:5}},
+
+  {id:'musk',emoji:'🚀',name:'Elon Musk',title:'Ingeniero · Emprendedor · Futurista',country:'🇿🇦🇺🇸',
+   bio:'<strong>Elon Musk</strong> fundó SpaceX, Tesla y Neuralink. Aprendió ingeniería coheteril leyendo libros. Nació en Sudáfrica sin contactos en Silicon Valley. Su obsesión: hacer a la humanidad multiplanetaria.',
+   bioFull:`<strong>Elon Musk</strong> nació en 1971 en Pretoria, Sudáfrica. A los 12 años vendió su primer videojuego programado por él mismo. Emigró a Canadá y luego a Estados Unidos. Estudió Física y Economía en Penn.<br><br>Su primera empresa, <strong>Zip2</strong>, la vendió por 307 millones. La segunda, <strong>X.com</strong>, se convirtió en PayPal — vendida por 1.5 mil millones. Con ese dinero hizo algo inesperado: fundó <strong>SpaceX</strong> para colonizar Marte y <strong>Tesla</strong> para la transición energética.<br><br>Ambas empresas casi quebraron simultáneamente en 2008. En el último momento, SpaceX ganó un contrato NASA y Tesla cerró una ronda clave. Musk se convirtió en el hombre más rico del mundo.<br><br>Lo que hace único a Musk no es solo el dinero: es su disposición a <strong>aprender ingeniería profunda en áreas donde no tenía experiencia</strong>. Aprendió física de cohetes leyendo manuales técnicos y cuestionó a ingenieros aeroespaciales con décadas de experiencia.`,
+   lesson:'Puedes aprender casi cualquier campo si te obsesionas lo suficiente. El fracaso es datos, no derrota.',
+   tags:['Ingeniería','Emprendimiento','Física','SpaceX'],
+   sc:{di:2,te:5,ne:4,de:0,ci:5,cr:4}},
+
+  {id:'mkbhd',emoji:'📱',name:'Marques Brownlee',title:'Creador de Contenido Tech · MKBHD',country:'🇺🇸',
+   bio:'<strong>MKBHD</strong> empezó a hacer videos de tecnología en YouTube a los 13 años desde su cuarto en Nueva Jersey. Hoy es el crítico de tecnología más influyente del mundo con más de 18 millones de suscriptores.',
+   bioFull:`<strong>Marques Brownlee</strong>, conocido como MKBHD, nació en 1993 en Nueva Jersey. A los 13 años compró una cámara básica y comenzó a subir reviews de tecnología a YouTube — un hobby mientras estudiaba en el colegio.<br><br>Estudió Comunicaciones y Negocios en Stevens Institute of Technology. Para cuando se graduó, ya tenía millones de suscriptores. Eligió YouTube sobre trabajar en una empresa tecnológica.<br><br>Lo que diferencia a MKBHD no es solo hablar de tecnología: es que <strong>combina el pensamiento de diseñador con la comunicación clara</strong>. Sus videos tienen producción cinematográfica. Entrevistó a Tim Cook, Elon Musk y Mark Zuckerberg. Su reseña de un producto puede mover el precio de las acciones de una empresa.<br><br>Paralelamente, es <strong>jugador profesional de ultimate frisbee</strong>. Brownlee demuestra que la pasión por la tecnología y la comunicación pueden convertirse en una carrera global sin trabajar para nadie más.`,
+   lesson:'La comunicación sobre tecnología es tan valiosa como construirla. Encontrar tu nicho y ser el mejor del mundo en él es una estrategia legítima.',
+   tags:['Contenido Digital','Tecnología','Video','Media'],
+   sc:{di:3,te:4,ne:3,de:3,ci:2,cr:5}},
+
+  {id:'nadal',emoji:'🎾',name:'Rafael Nadal',title:'Atleta · Académico · Mente Ganadora',country:'🇪🇸',
+   bio:'<strong>Rafa Nadal</strong> ganó 22 Grand Slams con una lesión crónica en el pie que lo debería haber retirado. Fundó la Academia Rafa Nadal, construyó un imperio deportivo y demostró que la disciplina mental lo puede todo.',
+   bioFull:`<strong>Rafael Nadal</strong> nació en 1986 en Manacor, Mallorca. Su tío Toni lo puso en una raqueta a los 3 años. A los 19 ganó Roland Garros por primera vez. Lo que siguió fue una de las carreras deportivas más extraordinarias de la historia: <strong>22 Grand Slams</strong>, más que ningún otro tenista.<br><br>Lo que distingue a Nadal es su relación con el dolor y la adversidad. Desde 2004 tiene el <strong>síndrome de Müller-Weiss</strong>, una enfermedad del hueso del pie que hace doloroso cada entrenamiento. Los médicos dijeron que su carrera terminaría pronto.<br><br>Fuera de la cancha, Nadal construyó la <strong>Rafa Nadal Academy</strong> en Mallorca, donde forma a jóvenes de todo el mundo. Tiene inversiones en negocios, restaurantes y embajadas de marca globales.<br><br>Su mentalidad es estudiada en universidades de negocio: la capacidad de <strong>mantener el foco en el presente</strong>, manejar presión extrema y levantarse de lesiones que hubieran terminado con otros.`,
+   lesson:'La resiliencia es una habilidad que se entrena. El deporte de alto rendimiento te enseña gestión mental que sirve para todo en la vida.',
+   tags:['Tenis','Resiliencia','Negocios','Academia'],
+   sc:{di:1,te:1,ne:4,de:5,ci:1,cr:3}},
+
+  {id:'lebron',emoji:'👑',name:'LeBron James',title:'Atleta · Productor · Inversionista',country:'🇺🇸',
+   bio:'<strong>LeBron</strong> transformó el modelo del atleta moderno: negoció sus propios contratos, fundó SpringHill Company, produjo contenido y hoy tiene inversiones en más de 30 marcas globales. El primer atleta billonario activo.',
+   bioFull:`<strong>LeBron James</strong> nació en 1984 en Akron, Ohio, en condiciones de pobreza. Su madre soltera luchaba para mantenerlos. A los 16 aparecía en la portada de Sports Illustrated: "El Elegido". A los 18 fue el #1 del draft NBA.<br><br>4 títulos de la NBA, 4 MVP, miles de récords. Pero lo que hizo <strong>fuera</strong> de la cancha es una lección de negocios sin igual.<br><br>En 2015 fundó <strong>SpringHill Company</strong> — una empresa de medios y producción que hoy vale más de 700 millones de dólares. Tiene participación en Boston Red Sox, Liverpool FC y docenas de empresas de tecnología y alimentación.<br><br>LeBron entendió que su imagen y su influencia son activos que se estructuran como un negocio. Dijo que quería ser el <strong>"primer atleta billonario activo"</strong> — y lo logró en 2022 mientras aún jugaba en la NBA.`,
+   lesson:'Tu plataforma, sea cual sea, puede ser un negocio. El atleta del siglo XXI es también empresario, inversor y creador de contenido.',
+   tags:['NBA','Negocios','Inversión','Media'],
+   sc:{di:1,te:2,ne:5,de:5,ci:0,cr:3}},
+
+  {id:'joi',emoji:'🌸',name:'Joi Ito',title:'Director del MIT Media Lab',country:'🇯🇵🇺🇸',
+   bio:'<strong>Joi Ito</strong> nunca terminó la universidad — dos veces. Aun así dirigió el <strong>MIT Media Lab</strong>, el laboratorio de innovación más famoso del mundo. Primer inversor de Twitter y Kickstarter.',
+   bioFull:`<strong>Joi Ito</strong> nació en 1966 en Osaka, Japón. Intentó estudiar en Tufts y luego en Chicago, pero dejó ambas. No tenía título cuando se convirtió en uno de los inversores de internet más influyentes de los 90.<br><br>Fue inversor temprano en <strong>Twitter, Kickstarter, Formlabs</strong> y decenas de startups. En 2011 fue nombrado director del <strong>MIT Media Lab</strong> — donde se inventaron tecnologías como el piano digital, el GPS moderno y primeros sistemas de reconocimiento de voz.<br><br>Su filosofía: la educación formal es un camino, no el único. La curiosidad, las conexiones y la disposición a experimentar pueden llevarte más lejos. Bajo su dirección, el Lab se enfocó en la intersección de <strong>arte, diseño, ciencia y tecnología</strong>.<br><br>Ito representa algo importante: la jerarquía tradicional (título → trabajo → éxito) es solo una de varias rutas posibles. Las redes globales y la curiosidad interdisciplinar pueden reemplazar al diploma.`,
+   lesson:'El aprendizaje continuo supera al título puntual. Construye una red global de mentes curiosas.',
+   tags:['Innovación','MIT','Interdisciplinar','VC'],
+   sc:{di:3,te:5,ne:3,de:0,ci:5,cr:4}},
+
+  {id:'osaka',emoji:'🎮',name:'Naomi Osaka',title:'Tenista · Empresaria · Activista',country:'🇯🇵🇺🇸',
+   bio:'<strong>Naomi Osaka</strong> es la deportista femenina mejor pagada de la historia. Fundó su propia marca de bebidas, skincare y tiene inversiones propias. Habla abiertamente de salud mental y cambió la conversación global.',
+   bioFull:`<strong>Naomi Osaka</strong> nació en 1997 en Osaka, hija de madre japonesa y padre haitiano. Se mudó a Estados Unidos a los 3 años. Creció entrenando en canchas públicas de Florida sin acceso a academias de élite.<br><br>Ganó 4 torneos de Grand Slam antes de los 24 años. En 2021 se retiró de Roland Garros citando problemas de salud mental — una decisión que generó debate mundial. <strong>Puso su salud mental antes que los trofeos</strong> y cambió la conversación global sobre el bienestar de los atletas.<br><br>Empresarialmente: cofundó <strong>KINLÒ</strong>, una marca de protección solar para pieles oscuras. Invirtió en el Angel City FC, los Rays de Tampa Bay y decenas de startups. Forbes la ubicó como la deportista femenina más rica del mundo.<br><br>Osaka demuestra que el deporte de alto rendimiento y los negocios globales pueden coexistir con una postura ética clara sobre bienestar y justicia social.`,
+   lesson:'El bienestar mental es una ventaja competitiva. El deporte moderno es también una plataforma de impacto social y negocios.',
+   tags:['Tenis','Salud Mental','Negocios','Activismo'],
+   sc:{di:2,te:2,ne:4,de:5,ci:1,cr:3}},
+
+  {id:'jensen',emoji:'🖥',name:'Jensen Huang',title:'CEO de NVIDIA · Arquitecto del AI',country:'🇹🇼🇺🇸',
+   bio:'<strong>Jensen Huang</strong> cofundó NVIDIA a los 30 años y la convirtió en la empresa más valiosa del mundo. Sus chips GPU son el motor de la inteligencia artificial, los videojuegos y la computación moderna.',
+   bioFull:`<strong>Jensen Huang</strong> nació en 1963 en Tainan, Taiwán. Se mudó a Estados Unidos a los 9 años. Estudió <strong>Ingeniería Eléctrica</strong> en Oregon State y luego una maestría en Stanford. Cofundó NVIDIA en 1993 con una reunión en un Denny's.<br><br>En los 90 y 2000, NVIDIA era conocida por tarjetas gráficas para videojuegos. Pero Huang vio antes que nadie que las GPUs — diseñadas para procesar gráficas en paralelo — eran perfectas para el <strong>machine learning</strong>.<br><br>Apostó toda la empresa a esa visión cuando nadie más lo hacía. El resultado: cuando llegó la revolución del AI con ChatGPT, NVIDIA ya tenía el monopolio de la infraestructura. En 2024, NVIDIA se convirtió en la <strong>empresa más valiosa del mundo</strong> con más de 3 billones de dólares.<br><br>Huang sigue siendo CEO después de 30 años — inusual en Silicon Valley — y es conocido por su mentalidad de largo plazo y disposición a apostar en visiones que tardan décadas en materializarse.`,
+   lesson:'Las apuestas más grandes requieren la visión más larga. Ingeniería + visión estratégica = imperios.',
+   tags:['Ingeniería Eléctrica','AI','Semiconductores','NVIDIA'],
+   sc:{di:2,te:5,ne:4,de:0,ci:5,cr:3}},
+
+  {id:'virgil',emoji:'👔',name:'Virgil Abloh',title:'Ingeniero Civil · Louis Vuitton · Off-White',country:'🇺🇸🇬🇭',
+   bio:'<strong>Virgil Abloh</strong> era ingeniero civil. Luego fue director creativo de Louis Vuitton y fundó Off-White. Combinó streetwear, arquitectura, arte y moda de lujo como nadie antes — murió a los 41 siendo uno de los más influyentes.',
+   bioFull:`<strong>Virgil Abloh</strong> nació en 1980 en Rockford, Illinois, hijo de inmigrantes de Ghana. Estudió <strong>Ingeniería Civil</strong> en Wisconsin. Luego hizo una maestría en Arquitectura en el Illinois Institute of Technology.<br><br>Su entrada a la moda fue inesperada: conoció a Kanye West y empezó a trabajar con él. En 2013 fundó <strong>Off-White</strong>, una marca que mezcló streetwear urbano con estética de diseño industrial y arte conceptual. Las zip ties, las comillas irônicas — todo era un comentario sobre qué significan los objetos.<br><br>En 2018 se convirtió en el <strong>primer diseñador negro en ser director creativo de Louis Vuitton</strong> — la casa de moda más poderosa del mundo. Sus colecciones mezclaban hip-hop, deporte, arquitectura y lujo europeo.<br><br>Murió en 2021 de cáncer a los 41, habiendo trabajado en secreto durante años. Su legado: cuando un <strong>ingeniero piensa como artista</strong>, el resultado es diseño que es al mismo tiempo funcional, conceptual y culturalmente transformador.`,
+   lesson:'La ingeniería y el arte no son opuestos. Tu formación técnica puede ser tu ventaja creativa más grande.',
+   tags:['Diseño','Moda','Arquitectura','Off-White'],
+   sc:{di:5,te:2,ne:3,de:1,ci:2,cr:5}},
+
+  {id:'feifei',emoji:'🧠',name:'Fei-Fei Li',title:'Pionera de la Inteligencia Artificial',country:'🇨🇳🇺🇸',
+   bio:'<strong>Fei-Fei Li</strong> creó ImageNet, el dataset que desencadenó la revolución del deep learning. Inmigrante china que lavó platos para pagar la universidad. Hoy es la científica de AI más influyente del mundo.',
+   bioFull:`<strong>Fei-Fei Li</strong> nació en 1976 en Chengdu, China. Emigró a Estados Unidos a los 16 años. En New Jersey su familia no tenía dinero — lavaba platos y trabajaba en una lavandería mientras estudiaba con becas.<br><br>Ganó una beca para estudiar Física en Princeton. Luego hizo su doctorado en Caltech en visión computacional. Su proyecto más importante comenzó en 2006: recolectar y etiquetar millones de imágenes para crear <strong>ImageNet</strong>.<br><br>En 2012, un equipo usó ImageNet para entrenar una red neuronal profunda que superó a todos los sistemas anteriores. Ese momento desencadenó la <strong>revolución del deep learning</strong> que dio origen a la AI moderna — reconocimiento facial, autos autónomos, diagnóstico médico.<br><br>Fue directora de AI en Google Cloud y del AI Lab de Stanford. Hoy lidera el <strong>Human-Centered AI Institute</strong>, enfocado en desarrollar AI que sirva a las personas, no que las reemplace.`,
+   lesson:'La ciencia de datos y la inteligencia artificial son los campos más transformadores de nuestra época. Vienen del pensamiento riguroso combinado con una visión humana.',
+   tags:['Inteligencia Artificial','Data Science','Stanford','Pionera'],
+   sc:{di:1,te:5,ne:2,de:0,ci:5,cr:3}},
+
+  {id:'newson',emoji:'🏎',name:'Marc Newson',title:'Diseñador Industrial · El Más Influyente Vivo',country:'🇦🇺',
+   bio:'<strong>Marc Newson</strong> diseñó el objeto de diseño más caro en subasta. Diseñó aviones para Ford, zapatos Nike, yates, relojes. Aviones y joyas. Es el diseñador industrial más influyente vivo.',
+   bioFull:`<strong>Marc Newson</strong> nació en 1963 en Sídney, Australia. Estudió joyería y escultura — no diseño industrial convencional. Esa combinación inusual le dio un sentido del detalle y la forma que pocos diseñadores tienen.<br><br>Su primera pieza icónica, el <strong>Lockheed Lounge</strong> (1985), una silla de fibra de vidrio cubierta de aluminio remachado, se vendió en subasta por más de 3 millones de dólares — el objeto de diseño más caro vendido por un diseñador vivo.<br><br>Newson diseñó en todos los campos imaginables: <strong>aviones conceptuales para Ford</strong>, la cabina del A380 de Qantas, relojes para Ikepod, zapatos para Nike, bicicletas, yates de lujo, muebles. Cada objeto tiene su firma: líneas orgánicas, materiales premium, una sensación de haber venido del futuro.<br><br>En 2014, Jony Ive lo invitó a unirse a <strong>Apple</strong> como diseñador. Trabajaron juntos en el Apple Watch. Newson representa la cima del diseño industrial global: cuando dominas la forma y los materiales, el mundo entero es tu campo de acción.`,
+   lesson:'El diseño industrial no tiene límites de industria. Quien entiende la forma puede diseñar desde un avión hasta una cuchara.',
+   tags:['Diseño Industrial','Materiales','Lujo','Apple'],
+   sc:{di:5,te:3,ne:2,de:0,ci:3,cr:5}},
+
+  {id:'yzy',emoji:'⚽',name:'Óscar Iván Zuluaga',title:'Ingeniero Industrial · Fundador · Colombia',country:'🇨🇴',
+   bio:'<strong>Zuluaga</strong> representa la generación de ingenieros industriales colombianos que construyeron empresas globales desde Medellín. La ciudad ha producido más unicornios tech per cápita que cualquier otra en Latinoamérica.',
+   bioFull:`<strong>Medellín, Colombia</strong> es hoy reconocida como una de las ciudades más innovadoras del mundo. En las últimas dos décadas, una generación de ingenieros, diseñadores y tecnólogos colombianos han construido empresas que compiten globalmente.<br><br>Empresas como <strong>Rappi</strong> (fundada por colombianos), <strong>Bancolombia Digital</strong>, <strong>Platzi</strong> (educación tech para toda Latinoamérica desde Bogotá), y decenas de startups que operan desde el país hacia el mundo.<br><br>La historia de Colombia en tecnología es joven pero potente. <strong>El talento está ahí</strong> — lo que hace la diferencia es la visión global, el dominio del inglés, y la disposición a construir desde casa para el mundo entero.<br><br>Un joven colombiano hoy tiene algo que ninguna generación anterior tuvo: acceso a formación de clase mundial online, mentores globales en LinkedIn, y la posibilidad de trabajar para empresas en San Francisco o Berlín sin salir de Bogotá o Medellín.`,
+   lesson:'Colombia ya produce talento de clase mundial en tecnología y diseño. La clave: visión global, formación técnica sólida y disposición a conectarse con el mundo.',
+   tags:['Colombia','Innovación','Tech','Latam'],
+   sc:{di:2,te:3,ne:4,de:1,ci:2,cr:3}},
+
+  {id:'serena',emoji:'🎾',name:'Serena Williams',title:'Atleta · Inversionista · VC',country:'🇺🇸',
+   bio:'<strong>Serena Williams</strong> ganó 23 Grand Slams y fundó Serena Ventures, un fondo de inversión que apoya a emprendedores de comunidades subrepresentadas. El atletismo como trampolín hacia el capital.',
+   bioFull:`<strong>Serena Williams</strong> nació en 1981 en Compton, California, en una de las zonas más difíciles de Los Ángeles. Su padre Richard la entrenó en canchas públicas con un plan que escribió antes de que naciera. A los 14 años ya era profesional.<br><br>Ganó <strong>23 Grand Slams</strong> — más que cualquier tenista en la era abierta. Ganó Roland Garros estando embarazada. Su carrera es un monumento a la resistencia física y mental.<br><br>Pero en 2022, al "evolucionar" fuera del tenis (su palabra para retiro), reveló lo que había construido en paralelo: <strong>Serena Ventures</strong>, un fondo de capital de riesgo que ha invertido en más de 60 empresas. Su portafolio incluye empresas de tecnología, salud, alimentación y moda.<br><br>Williams demostró que un atleta de élite puede convertirse en inversionista de primer nivel. Su red de contactos, su marca personal y su disciplina — construidas en las canchas — son exactamente lo que hace falta para identificar y apoyar a los próximos emprendedores del mundo.`,
+   lesson:'La carrera deportiva construye activos — red, marca personal, disciplina — que tienen valor enorme fuera del deporte.',
+   tags:['Tenis','Venture Capital','Negocios','Inversión'],
+   sc:{di:1,te:2,ne:5,de:5,ci:0,cr:3}}
+];
+
+const PREGUNTAS = [
+  {tag:'TU FORMA DE PENSAR',text:'Cuando ves un producto que no te gusta, ¿qué es lo primero que piensas?',hint:'No hay respuesta incorrecta — elige la que más te representa.',
+   opts:[{t:'Cómo lo rediseñaría para que se vea mejor',sc:{di:3,cr:3}},{t:'Por qué falla técnicamente y cómo arreglarlo',sc:{te:3,ci:2}},{t:'Por qué la gente lo compra y cómo mejorar el negocio',sc:{ne:3}},{t:'Cuánto esfuerzo requirió construirlo',sc:{ci:2,te:2}}]},
+  {tag:'TU ENERGÍA',text:'¿En qué entorno sientes que el tiempo vuela?',hint:'El lugar donde eres más tú mismo.',
+   opts:[{t:'Haciendo deporte o entrenando',sc:{de:4}},{t:'Construyendo o prototipando algo con mis manos',sc:{di:3,te:2}},{t:'Programando o resolviendo problemas técnicos',sc:{te:4,ci:2}},{t:'Presentando ideas y convenciendo a otros',sc:{ne:3,cr:2}}]},
+  {tag:'TU VISIÓN DE IMPACTO',text:'Si pudieras ver el impacto de tu trabajo en 20 años, ¿cuál te llenaría más de orgullo?',hint:'Piensa a largo plazo — no en el dinero, sino en el legado.',
+   opts:[{t:'Un producto que usa gente en todo el mundo',sc:{di:4,te:2}},{t:'Un avance científico que cambió una industria',sc:{te:3,ci:4}},{t:'Una empresa que generó miles de empleos',sc:{ne:4}},{t:'Haber competido al más alto nivel deportivo mundial',sc:{de:4,cr:2}}]},
+  {tag:'TU ESTILO DE APRENDER',text:'¿Cómo aprendes mejor?',hint:'Sin juzgar — cada estilo es válido.',
+   opts:[{t:'Armando y desarmando cosas físicas',sc:{di:3,ci:2}},{t:'Leyendo, investigando y haciendo ejercicios lógicos',sc:{ci:4,te:2}},{t:'Practicando repetidamente hasta perfeccionar',sc:{de:3,cr:2}},{t:'Escuchando historias de éxito y analizando decisiones',sc:{ne:3,cr:2}}]},
+  {tag:'TU CAFÉ IDEAL',text:'Si pudieras tomar un café con alguno de estos perfiles, ¿con quién irías?',hint:'El que más te genera curiosidad genuina.',
+   opts:[{t:'El diseñador que creó productos usados por billones de personas',sc:{di:4,cr:3}},{t:'El ingeniero que fundó una empresa tecnológica global',sc:{te:4,ne:3}},{t:'El atleta que también construyó un imperio empresarial',sc:{de:3,ne:3}},{t:'La científica que desencadenó la revolución del AI',sc:{ci:4,te:2}}]},
+  {tag:'TU PROYECTO SOÑADO',text:'Si tuvieras recursos ilimitados, ¿qué arrancarías mañana?',hint:'Deja volar la imaginación.',
+   opts:[{t:'Una marca de productos que mezcle deporte y tecnología',sc:{di:3,de:2,ne:2}},{t:'Una startup de software que resuelva un problema social',sc:{te:4,ne:3,cr:2}},{t:'Un equipo deportivo de alto rendimiento con datos y tecnología',sc:{de:4,te:2,ne:2}},{t:'Un estudio de diseño con clientes en el mundo entero',sc:{di:5,cr:4,ne:2}}]},
+  {tag:'TU SUPERPODER',text:'¿Cuál de estas habilidades sientes más natural en ti?',hint:'Sin falsa modestia — ¿en qué eres realmente bueno?',
+   opts:[{t:'Ver oportunidades de mejora en todo lo que me rodea',sc:{di:3,cr:3,ne:2}},{t:'Entender sistemas complejos y cómo funcionan',sc:{te:4,ci:3}},{t:'La disciplina y constancia para mejorar cada día',sc:{de:4,ci:2}},{t:'Conectar con personas y comunicar ideas claramente',sc:{ne:3,cr:3}}]},
+  {tag:'TECNOLOGÍA & TÚ',text:'¿Cómo describes tu relación con la tecnología?',hint:'Honestamente.',
+   opts:[{t:'Me fascina cómo funciona por dentro — quiero construirla',sc:{te:5,ci:3}},{t:'Me interesa cómo hace la vida más bonita o fácil',sc:{di:4,cr:2}},{t:'Es una herramienta — me importa el resultado, no el proceso',sc:{ne:3,de:2}},{t:'Me atrae combinar deporte y tech: wearables, análisis de rendimiento',sc:{de:3,te:3}}]},
+  {tag:'TU DESTINO',text:'¿En qué ciudad del mundo te imaginas trabajando a los 30 años?',hint:'Sin límites — ¿dónde te ves?',
+   opts:[{t:'San Francisco o Silicon Valley — el centro global del tech',sc:{te:4,ne:3}},{t:'Milán, Tokio o Nueva York — capitales del diseño y la cultura',sc:{di:4,cr:4}},{t:'En el circuito global, donde me lleve mi carrera deportiva',sc:{de:4}},{t:'Fundando algo en Colombia pero con clientes en todo el mundo',sc:{ne:4,cr:3}}]},
+  {tag:'TU DESAFÍO',text:'¿Cuál de estos retos te genera más adrenalina?',hint:'El que te despierta algo por dentro.',
+   opts:[{t:'Diseñar un producto de cero que entre al mercado global',sc:{di:5,ne:3,cr:3}},{t:'Escribir código que resuelva algo que nadie ha resuelto',sc:{te:5,ci:3}},{t:'Ganar una competencia deportiva internacional de alto nivel',sc:{de:5,cr:2}},{t:'Construir una empresa desde cero y hacerla crecer',sc:{ne:5,cr:2}}]}
+];
+
+const PERFILES = [
+  {key:'tech',name:'EL INNOVADOR TECH',emoji:'⚡',
+   desc:'Tu mente busca entender cómo funciona todo y construir cosas nuevas. Tienes una combinación poderosa de <strong>curiosidad técnica y visión de impacto</strong>. No te conformas con usar la tecnología — quieres crearla.',
+   sn:['te','ci'],
+   carreras:[
+     {icon:'💻',name:'Ingeniería de Software',desc:'Desarrolla aplicaciones y plataformas que usan millones. Puedes trabajar desde Bogotá para empresas en San Francisco.'},
+     {icon:'🤖',name:'Ingeniería en AI / Machine Learning',desc:'El campo más transformador del siglo. Construye los sistemas que hacen que las máquinas aprendan.'},
+     {icon:'🔬',name:'Ingeniería Electrónica',desc:'Diseña los dispositivos físicos — wearables deportivos, chips como los de NVIDIA, sensores inteligentes.'},
+     {icon:'🎮',name:'Desarrollo de Videojuegos',desc:'Industria de 200 mil millones de dólares que mezcla ingeniería, arte y narrativa.'}
+   ],
+   refs:['Jensen Huang','Elon Musk','Fei-Fei Li','Joi Ito'],
+   quote:'"La tecnología no es nada. Lo que importa es creer en las personas."',qa:'— Steve Jobs'},
+
+  {key:'dis',name:'EL DISEÑADOR VISIONARIO',emoji:'✦',
+   desc:'Ves el mundo con ojos críticos y creativos. Te importa tanto <strong>cómo funciona algo como cómo se ve y cómo se siente</strong>. Eres el tipo de persona que Dieter Rams y Jony Ive representan: alguien que hace del mundo un lugar más coherente.',
+   sn:['di','cr'],
+   carreras:[
+     {icon:'🏭',name:'Diseño Industrial',desc:'Diseña los objetos físicos del mundo — productos, muebles, vehículos, equipos. Una de las carreras más globales y versátiles.'},
+     {icon:'🖥',name:'Diseño UX/UI',desc:'Diseña cómo las personas interactúan con apps y plataformas digitales. Demanda global enorme y trabajo remoto posible.'},
+     {icon:'🏛',name:'Arquitectura',desc:'Diseña los espacios donde vive y trabaja la humanidad. Combina arte, ingeniería y ciencias sociales.'},
+     {icon:'👔',name:'Diseño de Moda / Textil',desc:'Combina materiales, cultura y forma. Virgil Abloh llegó desde la ingeniería — el camino nunca es lineal.'}
+   ],
+   refs:['Dieter Rams','Jony Ive','Marc Newson','Virgil Abloh'],
+   quote:'"El diseño no es cómo se ve. Es cómo funciona."',qa:'— Steve Jobs'},
+
+  {key:'dep',name:'EL ATLETA ESTRATEGA',emoji:'🏆',
+   desc:'Tu motor es la <strong>disciplina, la competencia y la superación constante</strong>. El deporte te dio herramientas mentales que muy pocos tienen — y el mundo empresarial las valora enormemente.',
+   sn:['de','ne'],
+   carreras:[
+     {icon:'📊',name:'Sport Management / Dirección Deportiva',desc:'Dirige clubes, academias y federaciones. Negocia contratos, desarrolla talentos, construye marcas deportivas globales.'},
+     {icon:'🏃',name:'Ciencias del Deporte / Kinesiología',desc:'La ciencia detrás del rendimiento humano. Trabaja con atletas de élite en el mundo entero.'},
+     {icon:'📱',name:'SportTech — Tecnología Deportiva',desc:'Wearables, análisis de datos de rendimiento, plataformas de entrenamiento. La intersección perfecta entre deporte y tecnología.'},
+     {icon:'🎙',name:'Marketing y Comunicación Deportiva',desc:'Construye las marcas de atletas y equipos. Crea la narrativa que mueve fans y audiencias globales.'}
+   ],
+   refs:['Rafael Nadal','LeBron James','Naomi Osaka','Serena Williams'],
+   quote:'"Los campeones no se rinden cuando están cansados — se rinden cuando ganan."',qa:'— Billie Jean King'},
+
+  {key:'biz',name:'EL CONSTRUCTOR DE SISTEMAS',emoji:'⚙️',
+   desc:'Tu mente piensa en <strong>escala, eficiencia y sistemas que funcionen</strong>. Como Tim Cook, entiendes que hacer que las cosas lleguen al mundo correctamente es tan creativo como diseñarlas.',
+   sn:['ne','ci'],
+   carreras:[
+     {icon:'🏭',name:'Ingeniería Industrial',desc:'Optimiza procesos, cadenas de suministro y sistemas productivos. Tim Cook es el ejemplo máximo de un ingeniero industrial.'},
+     {icon:'📈',name:'Administración de Empresas',desc:'Dirige organizaciones, toma decisiones estratégicas, construye equipos de alto rendimiento global.'},
+     {icon:'🔧',name:'Ingeniería de Procesos / Manufactura',desc:'Diseña cómo se fabrican las cosas a escala. Las fábricas más sofisticadas del mundo necesitan esto.'},
+     {icon:'🌐',name:'Supply Chain / Logística Internacional',desc:'Mueve los objetos del mundo. El campo que Apple y Amazon han convertido en ventaja competitiva absoluta.'}
+   ],
+   refs:['Tim Cook','Jensen Huang','Elon Musk','LeBron James'],
+   quote:'"El trabajo más difícil es hacer algo simple."',qa:'— Tim Cook'}
+];
+
+// STATE
+let liked=new Set(), cq=0, sc={di:0,te:0,ne:0,de:0,ci:0,cr:0};
+
+// INIT
+(function(){
+  const g=document.getElementById('rgrid');
+  REFS.forEach(r=>{
+    const c=document.createElement('div');
+    c.className='rcard'; c.id='rc-'+r.id;
+    c.innerHTML=`<div class="remoji">${r.emoji}</div><div class="rname">${r.name}</div><div class="rtitle">${r.title}</div><div class="rbio">${r.bio}</div><div class="rtags">${r.tags.map(t=>`<span class="rtag">${t}</span>`).join('')}</div><div class="rcta">→ Toca para leer la historia completa</div><div class="rcountry">${r.country}</div>`;
+    c.onclick=()=>openM(r);
+    g.appendChild(c);
+  });
+})();
+
+function openM(r){
+  const lk=liked.has(r.id);
+  const o=document.getElementById('modal');
+  o.innerHTML=`<div class="mbox"><button class="mclose" onclick="closeM()">✕</button><div class="memoji">${r.emoji} ${r.country}</div><div class="mname">${r.name}</div><div class="msub">${r.title}</div><div class="mbio">${r.bioFull}</div><div class="mlesson"><div class="mlessonlbl">✦ Lección para tu vida</div><p>${r.lesson}</p></div><button class="mbtn ${lk?'lk':''}" id="mlk" onclick="togLike('${r.id}')">${lk?'✓ MARCADO COMO INSPIRACIÓN':'+ ESTA PERSONA ME INSPIRA'}</button><button class="mbtn" style="margin-top:.6rem;background:transparent;border:1px solid var(--border);color:var(--muted);font-size:1rem;" onclick="closeM()">← REGRESAR A REFERENTES</button></div>`;
+  o.classList.add('open');
+  o.onclick=e=>{if(e.target===o)closeM();};
+}
+function closeM(){document.getElementById('modal').classList.remove('open');}
+function togLike(id){
+  const btn=document.getElementById('mlk');
+  const card=document.getElementById('rc-'+id);
+  const ref=REFS.find(r=>r.id===id);
+  if(liked.has(id)){
+    liked.delete(id);
+    btn.textContent='+ ESTA PERSONA ME INSPIRA';
+    btn.classList.remove('lk');
+    card.classList.remove('liked');
+    if(ref)Object.entries(ref.sc).forEach(([k,v])=>{sc[k]-=Math.floor(v*.5);});
+  } else {
+    liked.add(id);
+    btn.textContent='✓ MARCADO COMO INSPIRACIÓN';
+    btn.classList.add('lk');
+    card.classList.add('liked');
+    if(ref)Object.entries(ref.sc).forEach(([k,v])=>{sc[k]+=Math.floor(v*.5);});
+  }
+  document.getElementById('lcount').textContent=liked.size;
+  const btnC=document.getElementById('btn-continuar');
+  const msgC=document.getElementById('msg-continuar');
+  if(liked.size>=1){
+    btnC.disabled=false;
+    btnC.style.opacity='1';
+    btnC.style.cursor='pointer';
+    btnC.onclick=()=>{goTo('s2');setP(50);};
+    msgC.style.color='var(--accent3)';
+    msgC.textContent='✓ Listo — puedes continuar al test';
+  } else {
+    btnC.disabled=true;
+    btnC.style.opacity='.35';
+    btnC.style.cursor='not-allowed';
+    btnC.onclick=null;
+    msgC.style.color='var(--accent1)';
+    msgC.textContent='★ Elige al menos 1 referente para continuar';
+  }
+}
+
+// QUIZ
+function initQ(){cq=0;renderQ();}
+function renderQ(){
+  const q=PREGUNTAS[cq];
+  document.getElementById('qnum').textContent=cq+1;
+  document.getElementById('qtag').textContent=q.tag;
+  document.getElementById('qtext').textContent=q.text;
+  document.getElementById('qhint').textContent=q.hint;
+  document.getElementById('qbar').style.width=(cq/PREGUNTAS.length*100)+'%';
+  const opts=document.getElementById('qopts');
+  opts.innerHTML='';
+  ['A','B','C','D'].forEach((l,i)=>{
+    const b=document.createElement('button');
+    b.className='qopt';
+    b.innerHTML=`<span class="qoptl">${l}</span><span>${q.opts[i].t}</span>`;
+    b.onclick=()=>{
+      document.querySelectorAll('.qopt').forEach(x=>x.classList.remove('sel'));
+      b.classList.add('sel');
+      Object.entries(q.opts[i].sc).forEach(([k,v])=>{sc[k]+=v;});
+      setTimeout(()=>{cq++;if(cq<PREGUNTAS.length)renderQ();else showRes();},350);
+    };
+    opts.appendChild(b);
+  });
+  setP(50+(cq/PREGUNTAS.length)*40);
+}
+
+// RESULTADO
+function showRes(){
+  setP(100);
+  const best=PERFILES.map(p=>({p,t:p.sn.reduce((a,k)=>a+(sc[k]||0),0)})).sort((a,b)=>b.t-a.t)[0].p;
+  document.getElementById('remoji').textContent=best.emoji;
+  document.getElementById('rpname').textContent=best.name;
+  document.getElementById('rdesc').innerHTML=best.desc;
+  document.getElementById('rquote').textContent=best.quote;
+  document.getElementById('rqauth').textContent=best.qa;
+
+  document.getElementById('clist').innerHTML=best.carreras.map(c=>`<div class="citem"><div class="cicon">${c.icon}</div><div class="cinfo"><h4>${c.name}</h4><p>${c.desc}</p></div></div>`).join('');
+
+  const labels={di:'Diseño & Forma',te:'Tecnología',ne:'Negocios',de:'Deporte',ci:'Ciencia & Análisis',cr:'Creatividad'};
+  const colors={di:'#ff5c2b',te:'#00d4ff',ne:'#b8ff57',de:'#ff3dbb',ci:'#ffc857',cr:'#a855f7'};
+  const mx=Math.max(...Object.values(sc))||1;
+  document.getElementById('sbars').innerHTML=Object.entries(sc).map(([k,v])=>`<div class="sbw"><div class="slbl"><span>${labels[k]}</span><span class="val">${v} pts</span></div><div class="strack"><div class="sfill" id="b-${k}" style="background:${colors[k]}"></div></div></div>`).join('');
+
+  const allRefs=[...new Set([...best.refs,...Array.from(liked).map(id=>{const r=REFS.find(x=>x.id===id);return r?r.name:null;}).filter(Boolean)])].slice(0,6);
+  document.getElementById('mchips').innerHTML=allRefs.map(n=>`<div class="mchip">${n}</div>`).join('');
+
+  goTo('s3');
+  setTimeout(()=>Object.entries(sc).forEach(([k,v])=>{const b=document.getElementById('b-'+k);if(b)b.style.width=Math.min(100,(v/mx)*100)+'%';}),300);
+}
+
+function goTo(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+  if(id==='s2')initQ();
+}
+function setP(v){document.getElementById('gp').style.width=v+'%';}
+</script>
+</body>
+</html>
