@@ -1,16 +1,16 @@
-# 🌟 Test Inspiracional de Vida
+# 🌟 ¿Quién Serás?
 
-Un test interactivo que, a través de una serie de preguntas, descubre tu arquetipo de vida y te inspira a conocerte mejor.
+Descubrí quién estás destinado a ser. Un test inspiracional que, a través de preguntas simples, revela tu arquetipo de vida y te invita a reflexionar sobre tu camino.
 
 ## 🚀 Demo en vivo
 
-👉 [Hacer el test](https://TU-URL-AQUI.com](https://ricardo-3.github.io/quien-seras/))
+👉 [Hacé el test ahora](https://ricardo-3.github.io/quien-seras/)
 
 ---
 
 ## 📖 ¿De qué se trata?
 
-Este proyecto es una aplicación web que guía al usuario por menos de 10 preguntas de opción múltiple para revelar su **arquetipo de vida**: un perfil simbólico que refleja su forma de ver el mundo, sus valores y su camino inspiracional.
+**¿Quién Serás?** es una aplicación web que guía al usuario por menos de 10 preguntas de opción múltiple para revelar su **arquetipo de vida**: un perfil simbólico que refleja su forma de ver el mundo, sus valores y su camino inspiracional.
 
 ---
 
@@ -46,7 +46,7 @@ Este proyecto es una aplicación web que guía al usuario por menos de 10 pregun
 
 1. Cloná el repositorio:
 ```bash
-   git clone https://github.com/tu-usuario/tu-repo.git
+   git clone https://github.com/ricardo-3/quien-seras.git
 ```
 2. Abrí `index.html` en tu navegador.
 
